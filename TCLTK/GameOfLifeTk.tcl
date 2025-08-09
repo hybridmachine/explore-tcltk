@@ -3,6 +3,8 @@
 # in a TK window
 package require Tk
 
+source initializePlayboard.tcl
+
 set playBoard {
     {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
     {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
@@ -18,6 +20,9 @@ set playBoard {
     {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
     {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
 }
+
+
+
 proc drawOnCanvas {canvas playBoard} {
     set rowIdx 0
     set colIdx 0
