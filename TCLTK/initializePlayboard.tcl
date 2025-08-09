@@ -31,17 +31,7 @@ proc initializePlayBoard { width height initialPattern } {
 }
 
 proc testInitializePlayBoard {} {
-    set r_pentomino {
-        {0 1 1}
-        {1 1 0}
-        {0 1 0}
-    }
-
-    set glider_gun {
-        {0 1 0}
-        {0 0 1}
-        {1 1 1}
-    }
+    source startingPatternLibrary.tcl
 
     set testBoard [ initializePlayBoard 32 32 $glider_gun ]
     set patternHeight [llength $testBoard]

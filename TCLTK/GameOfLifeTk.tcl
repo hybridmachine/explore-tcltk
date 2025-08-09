@@ -4,36 +4,22 @@
 package require Tk
 
 source initializePlayboard.tcl
+source startingPatternLibrary.tcl
 
-set playBoard {
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 1 1 0 0 0 0 0}
-    {0 0 0 0 0 0 0 1 1 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 1 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-    {0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
-}
-
-
+set ::blockSquareSize 30
+set playBoard [ initializePlayBoard 16 16 $glider_gun ]
 
 proc drawOnCanvas {canvas playBoard} {
     set rowIdx 0
     set colIdx 0
-    set gridHeightWidth 30
+    
     foreach row $playBoard {
         set colIdx 0
         foreach col $row {
             set bitValue [lindex $playBoard $rowIdx $colIdx]
             if { $bitValue == 1 } {
-                set topLeft  "[expr ($gridHeightWidth * $colIdx)] [expr ($gridHeightWidth * $rowIdx)]" 
-                set bottomRight  "[expr [lindex $topLeft 0] + $gridHeightWidth ] [expr [lindex $topLeft 1] + $gridHeightWidth ]"
+                set topLeft  "[expr ($::blockSquareSize * $colIdx)] [expr ($::blockSquareSize * $rowIdx)]" 
+                set bottomRight  "[expr [lindex $topLeft 0] + $::blockSquareSize ] [expr [lindex $topLeft 1] + $::blockSquareSize ]"
                 $canvas create rectangle "$topLeft $bottomRight" -fill red -outline white
                 #puts "canvas create rectangle $topLeft $bottomRight -fill red -outline white"
             }
@@ -44,8 +30,11 @@ proc drawOnCanvas {canvas playBoard} {
     
 }
 
+set canvasPixelHeight [expr [llength $playBoard] * $blockSquareSize + $blockSquareSize]
+set canvasPixelWidth [expr [llength [lindex $playBoard 0]] * $blockSquareSize + $blockSquareSize]
+
 ttk::frame .c -padding "3 3 12 12"
-tk::canvas .c.canvas -borderwidth 5 -relief ridge -width 500 -height 500
+tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight
 ttk::button .c.ok -text Okay
 ttk::button .c.cancel -text Cancel
 
