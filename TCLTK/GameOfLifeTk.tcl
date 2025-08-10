@@ -5,9 +5,12 @@ package require Tk
 
 source initializePlayboard.tcl
 source startingPatternLibrary.tcl
+source getNextGeneration.tcl
 
 set ::blockSquareSize 30
 set playBoard [ initializePlayBoard 16 16 $glider_gun ]
+
+
 
 proc drawOnCanvas {canvas playBoard} {
     set rowIdx 0
