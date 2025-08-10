@@ -60,7 +60,7 @@ set canvasPixelWidth [expr [llength [lindex $::playBoard 0]] * $blockSquareSize 
 ttk::frame .c -padding "3 3 12 12"
 tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight
 ttk::button .c.animate -text Animate
-ttk::button .c.stop -text Stop
+ttk::button .c.step -text Step
 
 #.c.canvas create rectangle 10 10 30 30 -fill red -outline blue
 drawOnCanvas .c.canvas $::playBoard
@@ -68,7 +68,7 @@ drawOnCanvas .c.canvas $::playBoard
 grid .c -column 0 -row 0 -sticky nsew
 grid .c.canvas -column 0 -row 0 -columnspan 2 -rowspan 2 -sticky nsew
 grid .c.animate -column 0 -row 3
-grid .c.stop -column 1 -row 3
+grid .c.step -column 1 -row 3
 
 bind .c.animate <Button-1> {
     set ::do_animate 1
@@ -76,9 +76,11 @@ bind .c.animate <Button-1> {
     .c.animate state disabled
 }
 
-bind .c.stop <Button-1> {
+bind .c.step <Button-1> {
     set ::do_animate 0
     .c.animate state !disabled
+    # Call animate to get the next step, but since run is off, this just single steps
+    animate 
 }
 
 grid columnconfigure . 0 -weight 1
