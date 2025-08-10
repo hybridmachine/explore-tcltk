@@ -7,8 +7,19 @@ source initializePlayboard.tcl
 source startingPatternLibrary.tcl
 source getNextGeneration.tcl
 
-set ::blockSquareSize 30
-set ::playBoard [ initializePlayBoard 32 32 $r_pentomino ]
+set ::blockSquareSize 10
+set ::playBoard [ initializePlayBoard 64 64 $r_pentomino ]
+set ::interval 10
+set ::do_animate 0
+
+proc animate {} {
+    set ::playBoard [ getNextGeneration $::playBoard ]
+    drawOnCanvas .c.canvas $::playBoard
+
+    if { $::do_animate > 0 } {
+        after $::interval animate
+    }
+}
 
 proc drawOnCanvas {canvas playBoard} {
     set rowIdx 0
@@ -39,20 +50,26 @@ set canvasPixelWidth [expr [llength [lindex $::playBoard 0]] * $blockSquareSize 
 
 ttk::frame .c -padding "3 3 12 12"
 tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight
-ttk::button .c.next -text Next
-ttk::button .c.close -text Close
+ttk::button .c.animate -text Animate
+ttk::button .c.stop -text Stop
 
 #.c.canvas create rectangle 10 10 30 30 -fill red -outline blue
 drawOnCanvas .c.canvas $::playBoard
 
 grid .c -column 0 -row 0 -sticky nsew
 grid .c.canvas -column 0 -row 0 -columnspan 2 -rowspan 2 -sticky nsew
-grid .c.next -column 0 -row 3
-grid .c.close -column 1 -row 3
+grid .c.animate -column 0 -row 3
+grid .c.stop -column 1 -row 3
 
-bind .c.next <Button-1> {
-    set ::playBoard [ getNextGeneration $::playBoard ]
-    drawOnCanvas .c.canvas $::playBoard
+bind .c.animate <Button-1> {
+    set ::do_animate 1
+    animate
+    .c.animate state disabled
+}
+
+bind .c.stop <Button-1> {
+    set ::do_animate 0
+    .c.animate state !disabled
 }
 
 grid columnconfigure . 0 -weight 1
