@@ -16,7 +16,7 @@ if { $argc == 3 } {
     set ::initialPattern [expr "\$[lindex $argv 2]"]
 }
 
-set ::blockSquareSize 10
+set ::blockSquareSize 15
 set ::playBoard [ initializePlayBoard $::boardWidth $::boardHeight $::initialPattern ]
 set ::interval 10
 set ::do_animate 0
