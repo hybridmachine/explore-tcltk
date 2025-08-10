@@ -7,8 +7,17 @@ source initializePlayboard.tcl
 source startingPatternLibrary.tcl
 source getNextGeneration.tcl
 
+set ::boardWidth 64
+set ::boardHeight 64
+set ::initialPattern $r_pentomino
+if { $argc == 3 } {
+    set ::boardWidth [lindex $argv 0]
+    set ::boardHeight [lindex $argv 1]
+    set ::initialPattern [expr "\$[lindex $argv 2]"]
+}
+
 set ::blockSquareSize 10
-set ::playBoard [ initializePlayBoard 64 64 $r_pentomino ]
+set ::playBoard [ initializePlayBoard $::boardWidth $::boardHeight $::initialPattern ]
 set ::interval 10
 set ::do_animate 0
 
