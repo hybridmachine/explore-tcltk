@@ -6,6 +6,7 @@ package require Tk
 source initializePlayboard.tcl
 source startingPatternLibrary.tcl
 source getNextGeneration.tcl
+source colorSpace.tcl
 
 set ::boardWidth 64
 set ::boardHeight 64
@@ -30,10 +31,20 @@ proc animate {} {
     }
 }
 
+proc getRandomColor {} {
+    set h [expr { int(256 * rand()) }]
+    set s [expr { int(256 * rand()) }]
+    set v [expr { int(256 * rand()) }]
+
+    lassign [hsvToRgb $h $s $v] r g b
+
+    return [format "#%02x%02x%02x" $r $g $b]
+}
+
 proc drawOnCanvas {canvas playBoard} {
     set rowIdx 0
     set colIdx 0
-
+    set cellColor [getRandomColor]
     # clear the canvas
     $canvas delete all
 
@@ -42,9 +53,10 @@ proc drawOnCanvas {canvas playBoard} {
         foreach col $row {
             set bitValue [lindex $playBoard $rowIdx $colIdx]
             if { $bitValue == 1 } {
+                set cellColor [getRandomColor]
                 set topLeft  "[expr ($::blockSquareSize * $colIdx)] [expr ($::blockSquareSize * $rowIdx)]" 
                 set bottomRight  "[expr [lindex $topLeft 0] + $::blockSquareSize ] [expr [lindex $topLeft 1] + $::blockSquareSize ]"
-                $canvas create rectangle "$topLeft $bottomRight" -fill red -outline white
+                $canvas create rectangle "$topLeft $bottomRight" -fill $cellColor -outline white
                 #puts "canvas create rectangle $topLeft $bottomRight -fill red -outline white"
             }
             set colIdx [ expr $colIdx + 1 ]
