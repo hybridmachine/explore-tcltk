@@ -54,9 +54,10 @@ proc drawOnCanvas {canvas playBoard} {
             set bitValue [lindex $playBoard $rowIdx $colIdx]
             if { $bitValue == 1 } {
                 set cellColor [getRandomColor]
+                set borderColor [getRandomColor]
                 set topLeft  "[expr ($::blockSquareSize * $colIdx)] [expr ($::blockSquareSize * $rowIdx)]" 
                 set bottomRight  "[expr [lindex $topLeft 0] + $::blockSquareSize ] [expr [lindex $topLeft 1] + $::blockSquareSize ]"
-                $canvas create rectangle "$topLeft $bottomRight" -fill $cellColor -outline white
+                $canvas create rectangle "$topLeft $bottomRight" -fill $cellColor -outline $borderColor
                 #puts "canvas create rectangle $topLeft $bottomRight -fill red -outline white"
             }
             set colIdx [ expr $colIdx + 1 ]
@@ -70,7 +71,7 @@ set canvasPixelHeight [expr [llength $::playBoard] * $blockSquareSize + $blockSq
 set canvasPixelWidth [expr [llength [lindex $::playBoard 0]] * $blockSquareSize + $blockSquareSize]
 
 ttk::frame .c -padding "3 3 12 12"
-tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight
+tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight -background black
 ttk::button .c.animate -text Animate
 ttk::button .c.step -text Step
 
