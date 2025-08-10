@@ -14,7 +14,7 @@ grid [ttk::label .c.mlbl -text "meters"] -column 3 -row 2 -sticky w
 
 foreach w [winfo children .c] {grid configure $w -padx 5 -pady 5}
 focus .c.feet
-bind . <Return> {calculate}
++bind . <Return> {calculate}
 
 proc calculate {} {  
    if {[catch {

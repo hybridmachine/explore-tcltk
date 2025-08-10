@@ -8,14 +8,15 @@ source startingPatternLibrary.tcl
 source getNextGeneration.tcl
 
 set ::blockSquareSize 30
-set playBoard [ initializePlayBoard 16 16 $glider_gun ]
-
-
+set ::playBoard [ initializePlayBoard 32 32 $r_pentomino ]
 
 proc drawOnCanvas {canvas playBoard} {
     set rowIdx 0
     set colIdx 0
-    
+
+    # clear the canvas
+    $canvas delete all
+
     foreach row $playBoard {
         set colIdx 0
         foreach col $row {
@@ -33,22 +34,26 @@ proc drawOnCanvas {canvas playBoard} {
     
 }
 
-set canvasPixelHeight [expr [llength $playBoard] * $blockSquareSize + $blockSquareSize]
-set canvasPixelWidth [expr [llength [lindex $playBoard 0]] * $blockSquareSize + $blockSquareSize]
+set canvasPixelHeight [expr [llength $::playBoard] * $blockSquareSize + $blockSquareSize]
+set canvasPixelWidth [expr [llength [lindex $::playBoard 0]] * $blockSquareSize + $blockSquareSize]
 
 ttk::frame .c -padding "3 3 12 12"
 tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight
-ttk::button .c.ok -text Okay
-ttk::button .c.cancel -text Cancel
+ttk::button .c.next -text Next
+ttk::button .c.close -text Close
 
 #.c.canvas create rectangle 10 10 30 30 -fill red -outline blue
-drawOnCanvas .c.canvas $playBoard
+drawOnCanvas .c.canvas $::playBoard
 
 grid .c -column 0 -row 0 -sticky nsew
 grid .c.canvas -column 0 -row 0 -columnspan 2 -rowspan 2 -sticky nsew
-grid .c.ok -column 0 -row 3
-grid .c.cancel -column 1 -row 3
+grid .c.next -column 0 -row 3
+grid .c.close -column 1 -row 3
 
+bind .c.next <Button-1> {
+    set ::playBoard [ getNextGeneration $::playBoard ]
+    drawOnCanvas .c.canvas $::playBoard
+}
 
 grid columnconfigure . 0 -weight 1
 grid rowconfigure . 0 -weight 1

@@ -8,7 +8,7 @@ proc getNextGeneration { playBoard } {
     set nextGeneration $playBoard
     set rowIdx 0
     set colIdx 0
-    puts [info level 0]
+    # puts [info level 0]
     foreach row $playBoard {
         set colIdx 0
         foreach col $row {
@@ -33,7 +33,7 @@ proc getNextGeneration { playBoard } {
             }
 
             if { $currentBitValue == 1} {
-                puts "$currentBitValue -- $neighbourCount"
+                # puts "$currentBitValue -- $neighbourCount"
                 # Any live cell with fewer than two live neighbours dies, as if by underpopulation.
                 if { $neighbourCount < 2 } { set nextGeneration [lset nextGeneration $rowIdx $colIdx 0] }
                 # Any live cell with two or three live neighbours lives on to the next generation.
