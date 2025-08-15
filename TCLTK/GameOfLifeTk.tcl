@@ -17,9 +17,9 @@ if { $argc == 3 } {
     set ::initialPattern [expr "\$[lindex $argv 2]"]
 }
 
-set ::blockSquareSize 15
+set ::blockSquareSize 25
 set ::playBoard [ initializePlayBoard $::boardWidth $::boardHeight $::initialPattern ]
-set ::interval 10
+set ::interval 20
 set ::do_animate 0
 
 proc animate {} {
@@ -39,8 +39,8 @@ proc getRandomColor {} {
     lassign [hsvToRgb $h $s $v] r g b
 
     # Force yellow for now
-    set r 200
-    set g 200
+    set r 250
+    set g 250
     set b 0
     return [format "#%02x%02x%02x" $r $g $b]
 }
@@ -105,10 +105,8 @@ bind .c.initpattern <<ComboboxSelected>> {
     set ::do_animate 0
     set selected_pattern_name [ .c.initpattern get ]
     set selected_pattern [expr "\$$selected_pattern_name"]
-    set ::blockSquareSize 15
     set ::playBoard [ initializePlayBoard $::boardWidth $::boardHeight $selected_pattern ]
     drawOnCanvas .c.canvas $::playBoard
-    set ::interval 10
 }
 grid columnconfigure . 0 -weight 1
 grid rowconfigure . 0 -weight 1
