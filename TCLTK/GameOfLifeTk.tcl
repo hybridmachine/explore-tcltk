@@ -38,6 +38,10 @@ proc getRandomColor {} {
 
     lassign [hsvToRgb $h $s $v] r g b
 
+    # Force yellow for now
+    set r 200
+    set g 200
+    set b 0
     return [format "#%02x%02x%02x" $r $g $b]
 }
 
@@ -74,14 +78,15 @@ ttk::frame .c -padding "3 3 12 12"
 tk::canvas .c.canvas -borderwidth 5 -relief ridge -width $canvasPixelWidth -height $canvasPixelHeight -background black
 ttk::button .c.animate -text Animate
 ttk::button .c.step -text Step
-
+ttk::combobox .c.initpattern -textvariable "Starting Pattern" -values [list r_pentomino glider_gun pulsar ]
 #.c.canvas create rectangle 10 10 30 30 -fill red -outline blue
 drawOnCanvas .c.canvas $::playBoard
 
 grid .c -column 0 -row 0 -sticky nsew
-grid .c.canvas -column 0 -row 0 -columnspan 2 -rowspan 2 -sticky nsew
+grid .c.canvas -column 0 -row 0 -columnspan 3 -rowspan 2 -sticky nsew
 grid .c.animate -column 0 -row 3
 grid .c.step -column 1 -row 3
+grid .c.initpattern -column 2 -row 3
 
 bind .c.animate <Button-1> {
     set ::do_animate 1
@@ -96,9 +101,19 @@ bind .c.step <Button-1> {
     animate 
 }
 
+bind .c.initpattern <<ComboboxSelected>> {
+    set ::do_animate 0
+    set selected_pattern_name [ .c.initpattern get ]
+    set selected_pattern [expr "\$$selected_pattern_name"]
+    set ::blockSquareSize 15
+    set ::playBoard [ initializePlayBoard $::boardWidth $::boardHeight $selected_pattern ]
+    drawOnCanvas .c.canvas $::playBoard
+    set ::interval 10
+}
 grid columnconfigure . 0 -weight 1
 grid rowconfigure . 0 -weight 1
 grid columnconfigure .c 0 -weight 1
 grid columnconfigure .c 1 -weight 1
 grid rowconfigure .c 1 -weight 1
+grid columnconfigure .c 2 -weight 0
 
